@@ -1,0 +1,32 @@
+import itertools
+import string
+
+def dictionary_attack(username, dictionary_file, correct_password):
+    with open(dictionary_file, 'r') as file:
+        for password in file:
+            password = password.strip()
+            if password == correct_password:
+                print(f"[SUCCESS] Password found for {username}: {password}")
+                return True
+    print("[FAILURE] Dictionary attack failed. Proceeding to brute force...")
+    return False
+
+def brute_force_attack(correct_password):
+    chars = string.ascii_letters  # A-Z, a-z
+    for attempt in itertools.product(chars, repeat=5):
+        attempt_password = ''.join(attempt)
+        if attempt_password == correct_password:
+            print(f"[SUCCESS] Password cracked: {attempt_password}")
+            return
+    print("[FAILURE] Brute force attack failed.")
+
+def main():
+    correct_password = "hello"  # Hardcoded password
+    username = input("Enter username: ")
+    dictionary_file = "dictionary.txt"  # Ensure this file contains a list of possible passwords
+    
+    if not dictionary_attack(username, dictionary_file, correct_password):
+        brute_force_attack(correct_password)
+
+if __name__ == "__main__":
+    main()
